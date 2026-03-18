@@ -9,5 +9,6 @@ public class MajorTomTestOpMode extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         waitForStart();
         telemetry.addLine("hello");
+        telemetry.update();
     }
 }
