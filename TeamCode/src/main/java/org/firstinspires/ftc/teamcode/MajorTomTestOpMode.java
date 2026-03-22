@@ -13,6 +13,7 @@ public class MajorTomTestOpMode extends LinearOpMode {
     public ElapsedTime timer = new ElapsedTime();
 
     public CRServo leftFeeder;
+    public CRServo rightFeeder;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -26,6 +27,7 @@ public class MajorTomTestOpMode extends LinearOpMode {
 
     public void initialize() {
         leftFeeder = hardwareMap.get(CRServo.class, "left_feeder");
+        rightFeeder = hardwareMap.get(CRServo.class, "right_feeder");
     }
 
     public void run(){
@@ -36,8 +38,10 @@ public class MajorTomTestOpMode extends LinearOpMode {
         ticks++;
         if (gamepad1.a) {
             leftFeeder.setPower(1);
+            rightFeeder.setPower(1);
         } else {
             leftFeeder.setPower(0);
+            rightFeeder.setPower(0);
         }
         updateTelemetry();
         timer.reset();
