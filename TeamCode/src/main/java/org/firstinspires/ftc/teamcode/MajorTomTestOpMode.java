@@ -24,8 +24,8 @@ public class MajorTomTestOpMode extends LinearOpMode {
     }
 
     public void initialize() {
-        leftFeeder = hardwareMap.get(CRServo.class, "left_feeder");
-        rightFeeder = hardwareMap.get(CRServo.class, "right_feeder");
+        leftFeeder = hardwareMap.get(CRServo.class, "leftFeeder");
+        rightFeeder = hardwareMap.get(CRServo.class, "rightFeeder");
     }
 
     public void run(){
