@@ -8,17 +8,17 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @TeleOp(name = "OmniDriveTest")
 public class OmniDriveTest extends LinearOpMode {
 
-    public int ticks;
+    private int ticks;
 
     private static final double maxSpeed = 0.5;
 
-    public ElapsedTime tickTimer = new ElapsedTime();
+    private final ElapsedTime tickTimer = new ElapsedTime();
 
 
-    public DcMotor leftFrontDrive;
-    public DcMotor leftBackDrive;
-    public DcMotor rightFrontDrive;
-    public DcMotor rightBackDrive;
+    private DcMotor leftFrontDrive;
+    private DcMotor leftBackDrive;
+    private DcMotor rightFrontDrive;
+    private DcMotor rightBackDrive;
 
 
     @Override
@@ -54,10 +54,17 @@ public class OmniDriveTest extends LinearOpMode {
         double scaledX = Math.signum(gamepad1.left_stick_x) * Math.pow(Math.abs(gamepad1.left_stick_x), 2) * maxSpeed;
         double scaledR = Math.signum(gamepad1.right_stick_x) * Math.pow(Math.abs(gamepad1.right_stick_x), 2) * maxSpeed;
 
-        leftFrontDrive.setPower(scaledX - scaledY + scaledR);
-        leftBackDrive.setPower(scaledX + scaledY - scaledR);
-        rightFrontDrive.setPower(-scaledX - scaledY - scaledR);
-        rightBackDrive.setPower(-scaledX + scaledY + scaledR);
+        double lf = scaledX - scaledY + scaledR;
+        double lb = scaledX + scaledY - scaledR;
+        double rf = -scaledX - scaledY - scaledR;
+        double rb = -scaledX + scaledY + scaledR;
+
+        double maxMagnitude = Math.max(1.0, Math.max(Math.max(Math.abs(lf), Math.abs(lb)), Math.max(Math.abs(rf), Math.abs(rb))));
+
+        leftFrontDrive.setPower(lf / maxMagnitude);
+        leftBackDrive.setPower(lb / maxMagnitude);
+        rightFrontDrive.setPower(rf / maxMagnitude);
+        rightBackDrive.setPower(rb / maxMagnitude);
 
         updateTelemetry();
         tickTimer.reset();
