@@ -5,20 +5,18 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name = "OmniDriveTest")
+@TeleOp(name = "OmniMotorTest")
 public class OmniDriveTest extends LinearOpMode {
-
-    private int ticks;
 
     private static final double maxSpeed = 0.5;
 
     private final ElapsedTime tickTimer = new ElapsedTime();
 
 
-    private DcMotor leftFrontDrive;
-    private DcMotor leftBackDrive;
-    private DcMotor rightFrontDrive;
-    private DcMotor rightBackDrive;
+    private DcMotor leftFrontMotor;
+    private DcMotor leftBackMotor;
+    private DcMotor rightFrontMotor;
+    private DcMotor rightBackMotor;
 
 
     @Override
@@ -32,15 +30,15 @@ public class OmniDriveTest extends LinearOpMode {
     }
 
     public void initialize() {
-        leftFrontDrive = hardwareMap.get(DcMotor.class, "leftFrontDrive");
-        leftBackDrive = hardwareMap.get(DcMotor.class, "leftBackDrive");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFrontDrive");
-        rightBackDrive = hardwareMap.get(DcMotor.class, "rightBackDrive");
+        leftFrontMotor = hardwareMap.get(DcMotor.class, "leftFrontMotor");
+        leftBackMotor = hardwareMap.get(DcMotor.class, "leftBackMotor");
+        rightFrontMotor = hardwareMap.get(DcMotor.class, "rightFrontMotor");
+        rightBackMotor = hardwareMap.get(DcMotor.class, "rightBackMotor");
 
-        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public void run() {
@@ -48,7 +46,6 @@ public class OmniDriveTest extends LinearOpMode {
     }
 
     public void tick() {
-        ticks++;
 
         double scaledY = Math.signum(gamepad1.left_stick_y) * Math.pow(Math.abs(gamepad1.left_stick_y), 2) * maxSpeed;
         double scaledX = Math.signum(gamepad1.left_stick_x) * Math.pow(Math.abs(gamepad1.left_stick_x), 2) * maxSpeed;
@@ -61,10 +58,10 @@ public class OmniDriveTest extends LinearOpMode {
 
         double maxMagnitude = Math.max(1.0, Math.max(Math.max(Math.abs(lf), Math.abs(lb)), Math.max(Math.abs(rf), Math.abs(rb))));
 
-        leftFrontDrive.setPower(lf / maxMagnitude);
-        leftBackDrive.setPower(lb / maxMagnitude);
-        rightFrontDrive.setPower(rf / maxMagnitude);
-        rightBackDrive.setPower(rb / maxMagnitude);
+        leftFrontMotor.setPower(lf / maxMagnitude);
+        leftBackMotor.setPower(lb / maxMagnitude);
+        rightFrontMotor.setPower(rf / maxMagnitude);
+        rightBackMotor.setPower(rb / maxMagnitude);
 
         updateTelemetry();
         tickTimer.reset();
