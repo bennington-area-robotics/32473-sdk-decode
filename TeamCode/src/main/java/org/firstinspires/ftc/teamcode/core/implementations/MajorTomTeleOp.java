@@ -5,13 +5,16 @@ import com.qualcomm.robotcore.hardware.CRServo;
 
 import org.firstinspires.ftc.teamcode.components.DriveBase;
 import org.firstinspires.ftc.teamcode.components.Feeders;
+import org.firstinspires.ftc.teamcode.components.Intake;
 import org.firstinspires.ftc.teamcode.core.SmartGamepad;
 import org.firstinspires.ftc.teamcode.core.TeleOpCore;
+import org.firstinspires.ftc.teamcode.hardware.Hardware;
 
 @TeleOp(name = "Major Tom TeleOp")
 public class MajorTomTeleOp extends TeleOpCore {
     protected static DriveBase driveBase;
     protected static Feeders feeders;
+    protected static Intake intake;
 
     @Override
     protected void initialize() {
@@ -30,6 +33,14 @@ public class MajorTomTeleOp extends TeleOpCore {
             );
         } catch (Exception e) {
             prettyTelem.error("Feeder servos failed to initialize, skipping: " + e.getMessage());
+        }
+
+        try {
+            intake = new Intake(
+                Hardware.getMotor("intakeMotor")
+            );
+        } catch (Exception e) {
+            prettyTelem.error("Intake motor failed to initialize, skipping: " + e.getMessage());
         }
     }
 
@@ -53,6 +64,15 @@ public class MajorTomTeleOp extends TeleOpCore {
                 feeders.feed(true);
             } else {
                 feeders.stop();
+            }
+        }
+
+        if (intake != null) {
+            if (gamepad1.options) {
+                intake.collect();
+            }
+            if (gamepad1.start) {
+                intake.stop();
             }
         }
     }
