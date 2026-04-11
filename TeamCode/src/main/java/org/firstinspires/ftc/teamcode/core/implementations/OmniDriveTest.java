@@ -15,7 +15,6 @@ public class OmniDriveTest extends OpModeCore {
 
     private final ElapsedTime tickTimer = new ElapsedTime();
 
-
     private SmartMotor leftFrontMotor;
     private SmartMotor leftBackMotor;
     private SmartMotor rightFrontMotor;
