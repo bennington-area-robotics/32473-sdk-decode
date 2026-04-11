@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.components;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
+
 import org.firstinspires.ftc.teamcode.hardware.Hardware;
 import org.firstinspires.ftc.teamcode.hardware.SmartMotor;
 
@@ -13,6 +15,11 @@ public class DriveBase {
         leftBack = Hardware.getMotor("leftBackMotor");
         rightFront = Hardware.getMotor("rightFrontMotor");
         rightBack = Hardware.getMotor("rightBackMotor");
+
+        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public double[] scaledInputs(double x, double y, double turn) {
