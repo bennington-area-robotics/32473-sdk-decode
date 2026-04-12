@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import org.firstinspires.ftc.teamcode.components.DriveBase;
 import org.firstinspires.ftc.teamcode.components.Feeders;
 import org.firstinspires.ftc.teamcode.components.Intake;
+import org.firstinspires.ftc.teamcode.components.LaunchControl;
 import org.firstinspires.ftc.teamcode.components.Launcher;
 import org.firstinspires.ftc.teamcode.core.SmartGamepad;
 import org.firstinspires.ftc.teamcode.core.TeleOpCore;
@@ -17,6 +18,7 @@ public class MajorTomTeleOp extends TeleOpCore {
     protected static Feeders feeders;
     protected static Intake intake;
     protected static Launcher launcher;
+    protected static LaunchControl launchControl;
 
     @Override
     protected void initialize() {
@@ -51,6 +53,15 @@ public class MajorTomTeleOp extends TeleOpCore {
             );
         } catch (Exception e) {
             prettyTelem.error("Launch motor failed to initialize, skipping: " + e.getMessage());
+        }
+
+        try {
+            launchControl = new LaunchControl(
+                feeders,
+                launcher
+            );
+        } catch (Exception e) {
+            prettyTelem.error("Launch controller failed to initialize, skipping: " + e.getMessage());
         }
     }
 
@@ -102,6 +113,12 @@ public class MajorTomTeleOp extends TeleOpCore {
             }
             if (gamepad1.rightTrigger > 0.9) {
                 launcher.incrementTargetVelocity(-10);
+            }
+        }
+
+        if (launchControl != null) {
+            if (gamepad1.b) {
+                launchControl.launch();
             }
         }
     }
