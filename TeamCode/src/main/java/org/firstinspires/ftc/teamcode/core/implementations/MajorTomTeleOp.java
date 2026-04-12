@@ -91,6 +91,18 @@ public class MajorTomTeleOp extends TeleOpCore {
             if (gamepad1.a) {
                 launcher.hardStop();
             }
+            if (gamepad1.y) {
+                launcher.launch();
+            }
+            if (gamepad1.x) {
+                launcher.jamPrevention();
+            }
+            if (gamepad1.leftTrigger > 0.9) {
+                launcher.incrementTargetVelocity(10);
+            }
+            if (gamepad1.rightTrigger > 0.9) {
+                launcher.incrementTargetVelocity(-10);
+            }
         }
     }
 
