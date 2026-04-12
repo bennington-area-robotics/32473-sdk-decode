@@ -59,9 +59,10 @@ public class MajorTomTeleOp extends TeleOpCore {
         if (driveBase != null) {
             if (gamepad1.rightBumper) {
                 driveBase.setPowerFactor(0.25);
-            }
-            if (gamepad1.leftBumper) {
+            } else if (gamepad1.leftBumper) {
                 driveBase.setPowerFactor(0.85);
+            } else {
+                driveBase.setPowerFactor(0.5);
             }
 
             driveBase.moveUsingInput(gamepad1.leftStickX, gamepad1.leftStickY, gamepad1.rightStickX);
