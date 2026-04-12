@@ -68,7 +68,7 @@ public class MajorTomTeleOp extends TeleOpCore {
         }
 
         if (intake != null) {
-            if (gamepad1.options) {
+            if (gamepad1.guide) {
                 intake.collect();
             }
             if (gamepad1.start) {

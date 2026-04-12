@@ -43,10 +43,10 @@ public class OmniDriveTest extends OpModeCore {
         double scaledX = Math.signum(gamepad1.left_stick_x) * Math.pow(Math.abs(gamepad1.left_stick_x), 2) * maxSpeed;
         double scaledR = Math.signum(gamepad1.right_stick_x) * Math.pow(Math.abs(gamepad1.right_stick_x), 2) * maxSpeed;
 
-        double lf = scaledX - scaledY + scaledR;
+        double lf = -scaledX + scaledY - scaledR;
         double lb = scaledX + scaledY - scaledR;
         double rf = -scaledX - scaledY - scaledR;
-        double rb = -scaledX + scaledY + scaledR;
+        double rb = scaledX - scaledY - scaledR;
 
         double maxMagnitude = Math.max(1.0, Math.max(Math.max(Math.abs(lf), Math.abs(lb)), Math.max(Math.abs(rf), Math.abs(rb))));
 
