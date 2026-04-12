@@ -29,7 +29,7 @@ public class Launcher {
         TARGET_VELOCITY = targetVelocity;
     }
 
-    public static void incrementTargetVelocity(double increment) {
+    public void incrementTargetVelocity(double increment) {
         setTargetVelocity(getTargetVelocity() + increment);
     }
 
