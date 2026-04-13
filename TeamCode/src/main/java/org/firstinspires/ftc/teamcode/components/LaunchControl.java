@@ -22,7 +22,21 @@ public class LaunchControl {
     }
 
     public void launch() {
-        state = "BEGIN_LAUNCH";
+        switch (state) {
+            case "RESTING": {
+                state = "UNJAMMING";
+            }
+            case "UNJAMMING": {
+                state = "BEGIN_LAUNCH";
+            }
+            case "LAUNCHING": {
+                timer.reset();
+            }
+        }
+    }
+
+    public void enterRest() {
+        state = "RESTING";
     }
 
     public void tick() {
