@@ -120,11 +120,18 @@ public class MajorTomTeleOp extends TeleOpCore {
             if (gamepad1.b) {
                 launchControl.launch();
             }
+            if (gamepad1.a) {
+                launchControl.enterRest();
+            }
         }
     }
 
     @Override
     public void tick() {
         super.tick();
+
+        if (launchControl != null) {
+            launchControl.tick();
+        }
     }
 }
