@@ -35,6 +35,7 @@ public class DriveBase {
     public double scaleValue(double value, double scale) {
         return Math.signum(value) * Math.pow(Math.abs(value), scale);
     }
+
     public void moveUsingInput(double x, double y, double turn) {
         double[] scaled = scaledInputs(x, y, turn);
         double scaledX = scaled[0];

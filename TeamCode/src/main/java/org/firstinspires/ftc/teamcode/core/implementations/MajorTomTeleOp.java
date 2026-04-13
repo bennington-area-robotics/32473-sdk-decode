@@ -99,9 +99,6 @@ public class MajorTomTeleOp extends TeleOpCore {
         }
 
         if (launcher != null) {
-            if (gamepad1.a) {
-                launcher.hardStop();
-            }
             if (gamepad1.y) {
                 launcher.launch();
             }

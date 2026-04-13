@@ -57,6 +57,6 @@ public class Launcher {
     }
 
     public boolean atSpeed() {
-        return false;
+        return (getVelocity() >= MIN_VELOCITY);
     }
 }
