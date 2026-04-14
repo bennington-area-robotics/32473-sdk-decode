@@ -25,12 +25,15 @@ public class LaunchControl {
         switch (state) {
             case "RESTING": {
                 state = "UNJAMMING";
+                break;
             }
             case "UNJAMMING": {
                 state = "BEGIN_LAUNCH";
+                break;
             }
             case "LAUNCHING": {
                 timer.reset();
+                break;
             }
         }
     }
@@ -44,19 +47,23 @@ public class LaunchControl {
             case "RESTING": {
                 launcher.hardStop();
                 feeders.stop();
+                break;
             }
             case "UNJAMMING": {
                 launcher.jamPrevention();
+                break;
             }
             case "BEGIN_LAUNCH": {
                 launcher.launch();
                 state = "SPINNING_UP";
+                break;
             }
             case "SPINNING_UP": {
                 if (launcher.atSpeed()) {
                     state = "LAUNCHING";
                     timer.reset();
                 }
+                break;
             }
             case "LAUNCHING": {
                 feeders.feed(false);
@@ -64,6 +71,7 @@ public class LaunchControl {
                     state = "UNJAMMING";
                     feeders.stop();
                 }
+                break;
             }
         }
     }
