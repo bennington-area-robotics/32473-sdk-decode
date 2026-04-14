@@ -12,7 +12,6 @@ public class Launcher {
     private final ElapsedTime timer = new ElapsedTime();
 
     private static double TARGET_VELOCITY = 1200;
-    private static double MIN_VELOCITY_DIFFERENCE = -100;
     private static double MIN_VELOCITY = TARGET_VELOCITY - 100;
 
     private final SmartMotor motor;
@@ -20,7 +19,14 @@ public class Launcher {
     public Launcher(SmartMotor motor) {
         this.motor = motor;
         motor.setDirection(DcMotorSimple.Direction.FORWARD);
-        motor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(300, 0, 5, 15));
+        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(
+                10,
+                0,
+                5,
+                13
+        )); // TUNE THIS
     }
 
     public static void setTargetVelocity(double targetVelocity) {
@@ -32,6 +38,8 @@ public class Launcher {
     }
 
     public void incrementTargetVelocity(double increment) {
+        double MIN_VELOCITY_DIFFERENCE = -100;
+
         setTargetVelocity(TARGET_VELOCITY + increment);
         setMinVelocity(TARGET_VELOCITY + MIN_VELOCITY_DIFFERENCE);
     }
