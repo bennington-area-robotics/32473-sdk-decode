@@ -129,6 +129,13 @@ public class MajorTomTeleOp extends TeleOpCore {
     public void tick() {
         super.tick();
 
+        telemetry.clear();
+
+        telemetry.addData("STATE", launchControl.getState());
+        telemetry.addData("VELOCITY", launcher.getVelocity());
+
+        telemetry.update();
+
         if (launchControl != null) {
             launchControl.tick();
         }
