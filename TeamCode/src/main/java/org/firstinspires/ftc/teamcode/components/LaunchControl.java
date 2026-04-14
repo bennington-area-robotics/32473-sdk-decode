@@ -7,6 +7,10 @@ public class LaunchControl {
     private final Feeders feeders;
     private final Launcher launcher;
 
+    public String getState() {
+        return state;
+    }
+
     private String state;
 
     private final ElapsedTime timer = new ElapsedTime();

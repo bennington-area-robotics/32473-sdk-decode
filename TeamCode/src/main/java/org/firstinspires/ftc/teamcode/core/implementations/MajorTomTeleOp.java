@@ -12,6 +12,8 @@ import org.firstinspires.ftc.teamcode.core.SmartGamepad;
 import org.firstinspires.ftc.teamcode.core.TeleOpCore;
 import org.firstinspires.ftc.teamcode.hardware.Hardware;
 
+import java.util.Objects;
+
 @TeleOp(name = "Major Tom TeleOp")
 public class MajorTomTeleOp extends TeleOpCore {
     protected static DriveBase driveBase;
@@ -79,16 +81,6 @@ public class MajorTomTeleOp extends TeleOpCore {
             driveBase.moveUsingInput(gamepad1.leftStickX, gamepad1.leftStickY, gamepad1.rightStickX);
         }
 
-        if (feeders != null) {
-            if (gamepad1.dpadUp) {
-                feeders.feed(false);
-            } else if (gamepad1.dpadDown) {
-                feeders.feed(true);
-            } else {
-                feeders.stop();
-            }
-        }
-
         if (intake != null) {
             if (gamepad1.back) {
                 intake.collect();
@@ -119,6 +111,16 @@ public class MajorTomTeleOp extends TeleOpCore {
             }
             if (gamepad1.a) {
                 launchControl.enterRest();
+            }
+
+            if (feeders != null) {
+                if (gamepad1.dpadUp) {
+                    feeders.feed(false);
+                } else if (gamepad1.dpadDown) {
+                    feeders.feed(true);
+                } else if (!Objects.equals(launchControl.getState(), "LAUNCHING")) {
+                    feeders.stop();
+                }
             }
         }
     }
