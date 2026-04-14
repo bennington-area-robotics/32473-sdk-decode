@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.components;
 
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class Feeders {
     private final CRServo leftFeeder;
@@ -11,7 +11,9 @@ public class Feeders {
 
     public Feeders(CRServo leftFeeder, CRServo rightFeeder) {
         this.leftFeeder = leftFeeder;
+        leftFeeder.setDirection(DcMotorSimple.Direction.REVERSE);
         this.rightFeeder = rightFeeder;
+        rightFeeder.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
     public void feed(Boolean reversed) {
