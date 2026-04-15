@@ -1,0 +1,114 @@
+package org.firstinspires.ftc.teamcode.core.implementations;
+
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.components.DriveBase;
+import org.firstinspires.ftc.teamcode.components.Feeders;
+import org.firstinspires.ftc.teamcode.components.Intake;
+import org.firstinspires.ftc.teamcode.components.LaunchControl;
+import org.firstinspires.ftc.teamcode.components.Launcher;
+import org.firstinspires.ftc.teamcode.core.SmartGamepad;
+import org.firstinspires.ftc.teamcode.core.TeleOpCore;
+import org.firstinspires.ftc.teamcode.hardware.Hardware;
+
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "Auto Blue From Goal")
+public class AutoBlueFromGoal extends TeleOpCore {
+
+    private String state = "START";
+
+    private final ElapsedTime timer = new ElapsedTime();
+
+
+    protected static DriveBase driveBase;
+
+    protected static Launcher launcher;
+
+    protected static Feeders feeders;
+
+    protected static LaunchControl launchControl;
+
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        switch (state) {
+            case("START"): {
+                timer.reset();
+                state = "LAUNCHING";
+                break;
+            }
+            case("LAUNCHING"): {
+                launchControl.launch();
+                if (timer.milliseconds() >= 10000) {
+                    timer.reset();
+                    state = "DELAY1";
+                }
+            }
+            case("DELAY1"): {
+                launchControl.enterRest();
+                if (timer.milliseconds() >= 1000) {
+                    timer.reset();
+                    state = "DRIVE1";
+                }
+            }
+            case("DRIVE1"): {
+                driveBase.moveUsingInput(0, -1, 0);
+                if (timer.milliseconds() >= 2000) {
+                    timer.reset();
+                    state = "DONE";
+                }
+                break;
+            }
+            case("DONE"): {
+                break;
+            }
+        }
+
+        launchControl.tick();
+    }
+
+    @Override
+    protected void initialize() {
+        super.initialize();
+
+        try {
+            driveBase = new DriveBase();
+        } catch (Exception e) {
+            prettyTelem.error("Drive base failed to initialize, skipping: " + e.getMessage());
+        }
+
+        try {
+            feeders = new Feeders(
+                    hardwareMap.get(CRServo.class, "leftFeeder"),
+                    hardwareMap.get(CRServo.class, "rightFeeder")
+            );
+        } catch (Exception e) {
+            prettyTelem.error("Feeder servos failed to initialize, skipping: " + e.getMessage());
+        }
+
+        try {
+            launcher = new Launcher(
+                    Hardware.getMotor("launchMotor")
+            );
+        } catch (Exception e) {
+            prettyTelem.error("Launch motor failed to initialize, skipping: " + e.getMessage());
+        }
+
+        try {
+            launchControl = new LaunchControl(
+                    feeders,
+                    launcher
+            );
+            launchControl.enterRest();
+        } catch (Exception e) {
+            prettyTelem.error("Launch controller failed to initialize, skipping: " + e.getMessage());
+        }
+    }
+
+    @Override
+    protected void checkGamepads(SmartGamepad gamepad1, SmartGamepad gamepad2) {
+        // DONT PUT ANYTHING HERE!!!
+    }
+}
