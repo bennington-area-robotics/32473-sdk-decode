@@ -58,19 +58,16 @@ public class LaunchControl {
                 break;
             }
             case "BEGIN_LAUNCH": {
-                launcher.launch();
-                state = "SPINNING_UP";
-                break;
-            }
-            case "SPINNING_UP": {
-                if (launcher.atSpeed()) {
-                    state = "LAUNCHING";
-                    timer.reset();
-                }
+                timer.reset();
+                state = "LAUNCHING";
                 break;
             }
             case "LAUNCHING": {
-                feeders.feed(false);
+                launcher.launch();
+
+                if (launcher.atSpeed()) {
+                    feeders.feed(false);
+                }
                 if (timer.milliseconds() >= 750) {
                     state = "UNJAMMING";
                     feeders.stop();
