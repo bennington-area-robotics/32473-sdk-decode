@@ -57,21 +57,19 @@ public class Launcher {
     }
 
     public void jamPrevention() {
-        double JAM_PREVENT_VELOCITY = 175;
+        double JAM_PREVENT_VELOCITY = -175;
 
-        motor.setDirection(DcMotorSimple.Direction.FORWARD);
         motor.setPower(controller.calcWithVelocity(JAM_PREVENT_VELOCITY, getVelocity()));
     }
 
     public void launch() {
-        motor.setDirection(DcMotorSimple.Direction.REVERSE);
         motor.setPower(controller.calcWithVelocity(TARGET_VELOCITY, getVelocity()));
     }
 
     public double getVelocity() {
         float ticksPerDegree = (537.7f / 360f);
 
-        return -motor.getVelocity() / ticksPerDegree;
+        return motor.getVelocity() / ticksPerDegree;
     }
 
     public boolean atSpeed() {
