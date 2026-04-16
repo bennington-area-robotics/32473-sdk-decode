@@ -134,6 +134,11 @@ public class PID implements ControlAlgorithm {
         return fResult;
     }
 
+    @Override
+    public boolean isBusy() {
+        return isBusy;
+    }
+
     /**
      * Sets the tolerance for the PID controller.
      * If the error is within this tolerance, the controller will stop adjusting the output.

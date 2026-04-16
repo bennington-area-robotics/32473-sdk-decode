@@ -68,6 +68,11 @@ public class MajorTomTeleOp extends TeleOpCore {
     }
 
     @Override
+    protected void run(){
+        launchControl.startIdling();
+    }
+
+    @Override
     protected void checkGamepads(SmartGamepad gamepad1, SmartGamepad gamepad2) {
         if (driveBase != null) {
             if (gamepad1.rightBumper) {
@@ -83,7 +88,7 @@ public class MajorTomTeleOp extends TeleOpCore {
 
         if (intake != null) {
             if (gamepad1.back) {
-                intake.collect();
+                intake.start();
             }
             if (gamepad1.start) {
                 intake.stop();
@@ -92,10 +97,10 @@ public class MajorTomTeleOp extends TeleOpCore {
 
         if (launcher != null) {
             if (gamepad1.y) {
-                launcher.launch();
+                launcher.setTargetVelocity(LaunchControl.LAUNCH_VELOCITY);
             }
             if (gamepad1.x) {
-                launcher.jamPrevention();
+                launcher.setTargetVelocity(LaunchControl.PREVENT_JAM_VELOCITY);
             }
             if (gamepad1.leftTrigger > 0.9) {
                 launcher.incrementTargetVelocity(10);
@@ -107,18 +112,18 @@ public class MajorTomTeleOp extends TeleOpCore {
 
         if (launchControl != null) {
             if (gamepad1.b) {
-                launchControl.launch();
+                launchControl.startSpinningUp();
             }
             if (gamepad1.a) {
-                launchControl.enterRest();
+                launchControl.startStopping();
             }
 
             if (feeders != null) {
                 if (gamepad1.dpadUp) {
-                    feeders.feed(false);
+                    feeders.start(false);
                 } else if (gamepad1.dpadDown) {
-                    feeders.feed(true);
-                } else if (!Objects.equals(launchControl.getState(), "LAUNCHING")) {
+                    feeders.start(true);
+                } else if (launchControl.getState() != LaunchControl.State.LAUNCHING) {
                     feeders.stop();
                 }
             }
@@ -129,15 +134,12 @@ public class MajorTomTeleOp extends TeleOpCore {
     public void tick() {
         super.tick();
 
-        telemetry.clear();
-
-        telemetry.addData("STATE", launchControl.getState());
-        telemetry.addData("VELOCITY", launcher.getVelocity());
-
-        telemetry.update();
-
         if (launchControl != null) {
             launchControl.tick();
+        }
+
+        if(launcher != null){
+            launcher.tick();
         }
     }
 }

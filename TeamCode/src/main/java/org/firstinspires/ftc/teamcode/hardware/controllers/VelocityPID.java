@@ -18,6 +18,11 @@ public class VelocityPID extends PID {
     private boolean firstCalculation = true;
     private final ElapsedTime velocityTimer = new ElapsedTime();
 
+    @Override
+    public boolean isBusy() {
+        return super.isBusy();
+    }
+
     protected VelocityPID(DoubleSupplier kP, DoubleSupplier kI, DoubleSupplier kD, DoubleSupplier kF, double tolerance) {
         super(kP, kI, kD, kF, tolerance);
     }

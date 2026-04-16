@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.core.OpModeCore;
 import org.firstinspires.ftc.teamcode.hardware.SmartMotor;
+import org.firstinspires.ftc.teamcode.hardware.controllers.PID;
 import org.firstinspires.ftc.teamcode.hardware.controllers.VelocityPID;
 
 @Configurable
@@ -14,14 +15,15 @@ public class Launcher {
 
     private final ElapsedTime timer = new ElapsedTime();
 
-    private static double TARGET_VELOCITY = 1000;
-    private static double MIN_VELOCITY = TARGET_VELOCITY - 100;
+
 
     private final VelocityPID controller;
 
-    public static double kP = 0.0001, kI = 0, kD = 0, kf = 0.001, tolerance = 30;
+    public static double kP = 0.003, kI = 0, kD = 0, kf = 0.00075, tolerance = 30;
 
     private final SmartMotor motor;
+
+    private double targetVelocity = 0;
 
     public Launcher(SmartMotor motor) {
         this.controller = new VelocityPID.Builder()
@@ -35,44 +37,32 @@ public class Launcher {
         motor.setDirection(DcMotorSimple.Direction.FORWARD);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         OpModeCore.getTelemetry().addData("Launcher Result", controller::result);
+        OpModeCore.getTelemetry().addData("Launcher Velocity", this::getCurrentVelocity);
     }
 
-    public static void setTargetVelocity(double targetVelocity) {
-        TARGET_VELOCITY = targetVelocity;
-    }
-
-    public static void setMinVelocity(double minVelocity) {
-        MIN_VELOCITY = minVelocity;
+    public void setTargetVelocity(double targetVelocity) {
+        this.targetVelocity = targetVelocity;
     }
 
     public void incrementTargetVelocity(double increment) {
-        double MIN_VELOCITY_DIFFERENCE = -100;
-
-        setTargetVelocity(TARGET_VELOCITY + increment);
-        setMinVelocity(TARGET_VELOCITY + MIN_VELOCITY_DIFFERENCE);
+        setTargetVelocity(targetVelocity + increment);
     }
 
-    public void hardStop() {
-        motor.setPower(0);
+    public void stop() {
+        setTargetVelocity(0);
     }
 
-    public void jamPrevention() {
-        double JAM_PREVENT_VELOCITY = -175;
-
-        motor.setPower(controller.calcWithVelocity(JAM_PREVENT_VELOCITY, getVelocity()));
+    public void tick(){
+        motor.setPower(controller.calcWithVelocity(targetVelocity, getCurrentVelocity()));
     }
 
-    public void launch() {
-        motor.setPower(controller.calcWithVelocity(TARGET_VELOCITY, getVelocity()));
-    }
-
-    public double getVelocity() {
+    public double getCurrentVelocity() {
         float ticksPerDegree = (537.7f / 360f);
 
         return motor.getVelocity() / ticksPerDegree;
     }
 
     public boolean atSpeed() {
-        return (getVelocity() >= MIN_VELOCITY);
+        return !controller.isBusy();
     }
 }

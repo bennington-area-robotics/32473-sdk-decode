@@ -42,11 +42,11 @@ public class DriveBase {
         double scaledY = scaled[1];
         double scaledTurn = scaled[2];
 
-        double denominator = Math.max(Math.abs(scaledX) + Math.abs(scaledY) + Math.abs(scaledTurn), 1);
-        double leftFront = ((-scaledX + scaledY - scaledTurn) / denominator);
-        double leftBack = ((scaledX + scaledY - scaledTurn) / denominator);
-        double rightFront = ((-scaledX - scaledY - scaledTurn) / denominator);
-        double rightBack = ((scaledX - scaledY - scaledTurn) / denominator);
+        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(turn), 1);
+        double leftFront = ((-x + y - turn) / denominator) * powerFactor;
+        double leftBack = ((x + y - turn) / denominator) * powerFactor;
+        double rightFront = ((-x - y - turn) / denominator) * powerFactor;
+        double rightBack = ((x - y - turn) / denominator) * powerFactor;
 
         setMotorPowers(leftFront, leftBack, rightFront, rightBack);
     }

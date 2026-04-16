@@ -1,19 +1,21 @@
 package org.firstinspires.ftc.teamcode.components;
 
+import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.core.OpModeCore;
+
+@Configurable
 public class LaunchControl {
+    public static double LAUNCH_VELOCITY = 1000;
+    public static double PREVENT_JAM_VELOCITY = -175;
+    public static double LAUNCH_TIME = 750;
 
     private final Feeders feeders;
     private final Launcher launcher;
+    private State state;
 
-    public String getState() {
-        return state;
-    }
-
-    private String state;
-
-    private final ElapsedTime timer = new ElapsedTime();
+    private final ElapsedTime launchTimer = new ElapsedTime();
 
     public LaunchControl(
         Feeders feeders,
@@ -22,58 +24,70 @@ public class LaunchControl {
         this.feeders = feeders;
         this.launcher = launcher;
 
-        this.state = "UNJAMMING";
+        this.state = State.STOPPED;
+        OpModeCore.getTelemetry().addLine("Launch Controller")
+                .addData("State", () -> state);
     }
 
-    public void launch() {
-        switch (state) {
-            case "RESTING": {
-                state = "UNJAMMING";
-                break;
-            }
-            case "UNJAMMING": {
-                state = "BEGIN_LAUNCH";
-                break;
-            }
-            case "LAUNCHING": {
-                timer.reset();
-                break;
-            }
-        }
-    }
-
-    public void enterRest() {
-        state = "RESTING";
+    public State getState(){
+        return state;
     }
 
     public void tick() {
         switch (state) {
-            case "RESTING": {
-                launcher.hardStop();
-                feeders.stop();
+            case STOPPED: {
+
                 break;
             }
-            case "UNJAMMING": {
-                launcher.jamPrevention();
+            case IDLING: {
+                launcher.setTargetVelocity(PREVENT_JAM_VELOCITY);
                 break;
             }
-            case "BEGIN_LAUNCH": {
-                timer.reset();
-                state = "LAUNCHING";
-                break;
-            }
-            case "LAUNCHING": {
-                launcher.launch();
+            case SPINNING_UP: {
+                launcher.setTargetVelocity(LAUNCH_VELOCITY);
 
                 if (launcher.atSpeed()) {
-                    feeders.feed(false);
-                }
-                if (timer.milliseconds() >= 750) {
-                    state = "UNJAMMING";
-                    feeders.stop();
+                    startLaunching();
                 }
                 break;
+            }
+            case LAUNCHING: {
+                if(launchTimer.milliseconds() > LAUNCH_TIME){
+                    startIdling();
+                }
             }
         }
     }
+
+    public void startSpinningUp(){
+        launcher.setTargetVelocity(LAUNCH_VELOCITY);
+        state = State.SPINNING_UP;
+    }
+
+    public void startLaunching(){
+        feeders.start(false);
+        launchTimer.reset();
+        state = State.LAUNCHING;
+    }
+
+    public void startIdling(){
+        feeders.stop();
+        launcher.setTargetVelocity(PREVENT_JAM_VELOCITY);
+        state = State.IDLING;
+    }
+
+    public void startStopping() {
+        launcher.stop();
+        feeders.stop();
+        state = State.STOPPED;
+    }
+
+
+    public enum State {
+        STOPPED,
+        IDLING,
+        SPINNING_UP,
+        LAUNCHING
+    }
+
 }

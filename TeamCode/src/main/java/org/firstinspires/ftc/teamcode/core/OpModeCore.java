@@ -26,10 +26,13 @@ public abstract class OpModeCore extends LinearOpMode {
 		instance = this;
 		initialize();
 		waitForStart();
+		run();
 		while(opModeIsActive()){
 			tick();
 		}
 	}
+
+	protected void run(){};
 
 	protected void initialize(){
 		Hardware.init(hardwareMap);

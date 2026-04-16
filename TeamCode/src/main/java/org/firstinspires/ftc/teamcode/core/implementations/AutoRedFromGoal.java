@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.components.DriveBase;
 import org.firstinspires.ftc.teamcode.components.Feeders;
-import org.firstinspires.ftc.teamcode.components.Intake;
 import org.firstinspires.ftc.teamcode.components.LaunchControl;
 import org.firstinspires.ftc.teamcode.components.Launcher;
 import org.firstinspires.ftc.teamcode.core.SmartGamepad;
@@ -40,14 +39,14 @@ public class AutoRedFromGoal extends TeleOpCore {
                 break;
             }
             case("LAUNCHING"): {
-                launchControl.launch();
+                //launchControl.launch();
                 if (timer.milliseconds() >= 10000) {
                     timer.reset();
                     state = "DELAY1";
                 }
             }
             case("DELAY1"): {
-                launchControl.enterRest();
+                launchControl.startStopping();
                 if (timer.milliseconds() >= 1000) {
                     timer.reset();
                     state = "DRIVE1";
@@ -101,7 +100,7 @@ public class AutoRedFromGoal extends TeleOpCore {
                     feeders,
                     launcher
             );
-            launchControl.enterRest();
+            launchControl.startStopping();
         } catch (Exception e) {
             prettyTelem.error("Launch controller failed to initialize, skipping: " + e.getMessage());
         }

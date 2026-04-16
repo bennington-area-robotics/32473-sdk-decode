@@ -16,7 +16,7 @@ public class Feeders {
         rightFeeder.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
-    public void feed(Boolean reversed) {
+    public void start(Boolean reversed) {
         double servoPower = (reversed ? -1 : 1) * power;
 
         this.leftFeeder.setPower(servoPower);

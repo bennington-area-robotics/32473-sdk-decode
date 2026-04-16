@@ -5,15 +5,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.components.DriveBase;
 import org.firstinspires.ftc.teamcode.components.Feeders;
-import org.firstinspires.ftc.teamcode.components.Intake;
 import org.firstinspires.ftc.teamcode.components.LaunchControl;
 import org.firstinspires.ftc.teamcode.components.Launcher;
-import org.firstinspires.ftc.teamcode.core.SmartGamepad;
-import org.firstinspires.ftc.teamcode.core.TeleOpCore;
+import org.firstinspires.ftc.teamcode.core.OpModeCore;
 import org.firstinspires.ftc.teamcode.hardware.Hardware;
 
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "Auto Blue From Goal")
-public class AutoBlueFromGoal extends TeleOpCore {
+public class AutoBlueFromGoal extends OpModeCore {
 
     private String state = "START";
 
@@ -40,14 +38,15 @@ public class AutoBlueFromGoal extends TeleOpCore {
                 break;
             }
             case("LAUNCHING"): {
-                launchControl.launch();
+                //TODO
+                // launchControl.launch();
                 if (timer.milliseconds() >= 10000) {
                     timer.reset();
                     state = "DELAY1";
                 }
             }
             case("DELAY1"): {
-                launchControl.enterRest();
+                launchControl.startStopping();
                 if (timer.milliseconds() >= 1000) {
                     timer.reset();
                     state = "DRIVE1";
@@ -101,14 +100,9 @@ public class AutoBlueFromGoal extends TeleOpCore {
                     feeders,
                     launcher
             );
-            launchControl.enterRest();
+            launchControl.startStopping();
         } catch (Exception e) {
             prettyTelem.error("Launch controller failed to initialize, skipping: " + e.getMessage());
         }
-    }
-
-    @Override
-    protected void checkGamepads(SmartGamepad gamepad1, SmartGamepad gamepad2) {
-        // DONT PUT ANYTHING HERE!!!
     }
 }

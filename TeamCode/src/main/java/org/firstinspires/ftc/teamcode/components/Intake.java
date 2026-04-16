@@ -13,7 +13,7 @@ public class Intake {
         motor.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
-    public void collect() {
+    public void start() {
         motor.setPower(1);
     }
 

@@ -30,6 +30,11 @@ public class GravityPID extends DirectionalPID implements ControlAlgorithm {
         return gResult;
     }
 
+    @Override
+    public boolean isBusy() {
+        return super.isBusy();
+    }
+
     public static class Builder {
         private DoubleSupplier kPForward = () -> 0, kIForward = () -> 0, kDForward = () -> 0, kFForward = () -> 0;
         private DoubleSupplier kPReverse = () -> 0, kIReverse = () -> 0, kDReverse = () -> 0, kFReverse = () -> 0;
