@@ -8,8 +8,8 @@ import org.firstinspires.ftc.teamcode.core.OpModeCore;
 @Configurable
 public class LaunchControl {
     public static double LAUNCH_VELOCITY = 1000;
-    public static double PREVENT_JAM_VELOCITY = -175;
-    public static double LAUNCH_TIME = 750;
+    public static double PREVENT_JAM_VELOCITY = -350;
+    public static double LAUNCH_TIME = 450;
 
     private final Feeders feeders;
     private final Launcher launcher;
