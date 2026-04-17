@@ -30,13 +30,14 @@ public class AutoRedFromFar extends TeleOpCore {
                 break;
             }
             case("DRIVE1"): {
-                driveBase.moveUsingInput(0, 1, 0);
+                driveBase.moveUsingInput(0, -0.5, 0);
                 if (timer.milliseconds() >= 2000) {
                     state = "DONE";
                 }
                 break;
             }
             case("DONE"): {
+                driveBase.moveUsingInput(0, 0, 0);
                 break;
             }
         }

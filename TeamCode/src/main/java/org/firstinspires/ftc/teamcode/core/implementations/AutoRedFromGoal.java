@@ -35,25 +35,11 @@ public class AutoRedFromGoal extends TeleOpCore {
         switch (state) {
             case("START"): {
                 timer.reset();
-                state = "LAUNCHING";
+                state = "DRIVE1";
                 break;
             }
-            case("LAUNCHING"): {
-                //launchControl.launch();
-                if (timer.milliseconds() >= 10000) {
-                    timer.reset();
-                    state = "DELAY1";
-                }
-            }
-            case("DELAY1"): {
-                launchControl.startStopping();
-                if (timer.milliseconds() >= 1000) {
-                    timer.reset();
-                    state = "DRIVE1";
-                }
-            }
             case("DRIVE1"): {
-                driveBase.moveUsingInput(0, -1, 0);
+                driveBase.moveUsingInput(0, 0.5, 0);
                 if (timer.milliseconds() >= 2000) {
                     timer.reset();
                     state = "DONE";
@@ -61,6 +47,7 @@ public class AutoRedFromGoal extends TeleOpCore {
                 break;
             }
             case("DONE"): {
+                driveBase.moveUsingInput(0, 0, 0);
                 break;
             }
         }
